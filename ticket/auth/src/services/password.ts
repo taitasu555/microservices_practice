@@ -4,6 +4,7 @@ import { promisify } from "util";
 const scryptAsync = promisify(scrypt);
 
 export class Password {
+    // can use static methods not create instance
   static async toHash(password: string) {
     const salt = randomBytes(8).toString("hex");
     const buf = (await scryptAsync(password, salt, 64)) as Buffer;
