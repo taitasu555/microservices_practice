@@ -2,26 +2,36 @@ import "bootstrap/dist/css/bootstrap.css";
 import buildClient from "../api/build-client";
 import Header from "../components/header";
 
-const AppComponent = ({ Component, pageProps }) => {
+const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
-      <Header currentUser={"Test"} />
+      <Header currentUser={currentUser ? currentUser.email : ""} />
       <Component {...pageProps} />
     </div>
   );
 };
 
-
-
-export async function getServerSideProps(appContext) {
+AppComponent.getInitialProps = async (appContext) => {
   const client = buildClient(appContext.ctx);
   const { data } = await client.get("/api/users/currentuser");
-
+  let pageProps = {};
+  if (appContext.Component.getInitialProps) {
+    pageProps = await appContext.Component.getInitialProps(appContext.ctx);
+  }
   return {
-    props: {
-      currentUser: data.currentUser,
-    },
+    pageProps,
+    ...data,
   };
-}
+};
 
+// export async function getServerSideProps(appContext) {
+//   const client = buildClient(appContext.ctx);
+//   const { data } = await client.get("/api/users/currentuser");
+
+//   return {
+//     props: {
+//       currentUser: data.currentUser,
+//     },
+//   };
+// }
 export default AppComponent;
