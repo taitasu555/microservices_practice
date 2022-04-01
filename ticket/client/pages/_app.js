@@ -24,8 +24,8 @@ AppComponent.getInitialProps = async (appContext) => {
   };
 };
 
-// export async function getServerSideProps(appContext) {
-//   const client = buildClient(appContext.ctx);
+// export async function getServerSideProps(context) {
+//   const client = buildClient(context);
 //   const { data } = await client.get("/api/users/currentuser");
 
 //   return {
