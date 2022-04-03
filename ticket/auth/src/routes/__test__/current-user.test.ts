@@ -1,3 +1,4 @@
+import { response } from "express";
 import request from "supertest";
 import { app } from "../../app";
 
@@ -16,9 +17,10 @@ it("response of current user", async () => {
 it("response of current user with an empty cookie", async () => {
   const cookie = "";
 
-  await request(app)
+  const response = await request(app)
     .get("/api/users/currentuser")
     .set("Cookie", cookie)
-    .send()
-    .expect(401);
+    .send();
+
+  expect(response.body.currentUser).toEqual(null);
 });
