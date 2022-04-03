@@ -1,10 +1,10 @@
-import express, { Request, Response } from "express";
-import { requireAuth } from "@taitasudev5/common";
+import express, { Request, Response } from 'express';
+import { requireAuth } from '@cygnetops/common';
 
 const router = express.Router();
 
-router.post("/api/tickets", requireAuth, (req: Request, res: Response) => {
-  res.status(200);
+router.post('/api/tickets', requireAuth, (req: Request, res: Response) => {
+  res.sendStatus(200);
 });
 
-export { router as newTicketRouter };
+export { router as createTicketRouter };
