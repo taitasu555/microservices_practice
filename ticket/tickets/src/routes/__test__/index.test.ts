@@ -1,6 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 
+jest.mock("../../__mock__/nats-wrapper.ts");
 const createTicket = () => {
   return request(app).post("/api/tickets").set("Cookie", global.signin()).send({
     title: "concert",
