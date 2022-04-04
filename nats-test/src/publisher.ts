@@ -15,5 +15,9 @@ stan.on("connect", async () => {
     price: 20,
   };
   const publisher = new TicketCreatedPublisher(stan);
-  await publisher.publish(data);
+  try {
+    await publisher.publish(data);
+  } catch (err) {
+    console.error(err);
+  }
 });

@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { requireAuth, validationRequest } from "@taitasudev5/common";
 import { body } from "express-validator";
 import { Ticket } from "../models/ticket";
+import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
 
 const router = express.Router();
 
@@ -18,13 +19,19 @@ router.post(
   validationRequest,
   async (req: Request, res: Response) => {
     const { title, price } = req.body;
-    console.log(req.currentUser);
     const ticket = Ticket.build({
       title,
       price,
       userId: req.currentUser!.id,
     });
     await ticket.save();
+
+    // new TicketCreatedPublisher(client).publish({
+    //   id: ticket.id,
+    //   title: ticket.title,
+    //   price: ticket.price,
+    //   userId: ticket.userId,
+    // });
     res.status(201).send(ticket);
   }
 );
