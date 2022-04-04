@@ -1,9 +1,14 @@
 import { Message, Stan } from "node-nats-streaming";
+import { Subjects } from "./subjects";
 
-export abstract class Listener {
-  abstract subject: string;
+interface Event {
+  subject: Subjects;
+  data: any;
+}
+export abstract class Listener<T extends Event> {
+  abstract subject: T["subject"];
   abstract queueGroupName: string;
-  abstract onMessage(data: string, msg: Message): void;
+  abstract onMessage(data: T["data"], msg: Message): void;
   private client: Stan;
   private ackWait = 5 * 1000;
 
@@ -40,15 +45,5 @@ export abstract class Listener {
     return typeof data === "string"
       ? JSON.parse(data)
       : JSON.parse(data.toString("utf8"));
-  }
-}
-
-class TicketCreatedListener extends Listener {
-  subject = "ticket:created";
-  queueGroupName = "payment-service";
-  onMessage(data: any, msg: Message) {
-    console.log("Event data", data);
-    // acknowledge the message if error happen
-    msg.ack();
   }
 }
