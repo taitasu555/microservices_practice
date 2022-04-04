@@ -23,7 +23,14 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
-
+            - name: NATS_URL
+              value: https://nats-srv:4222
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            - name: NATS_CLIENT_ID
+              valueFrom: # NATS_CLIENT_ID is set to the pod name
+                fieldRef:
+                  fieldPath: metadata.name
 ---
 apiVersion: v1
 kind: Service

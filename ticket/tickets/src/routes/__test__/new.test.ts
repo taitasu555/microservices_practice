@@ -50,7 +50,7 @@ it("creates a ticket with valid inputs", async () => {
   expect(ticket.length).toEqual(0);
   const res = await request(app)
     .post("/api/tickets")
-    .set("Cookie", global.signin1())
+    .set("Cookie", global.signin())
     .send({
       title: "asdf",
       price: 20,
