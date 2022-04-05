@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { Order, OrderStatus } from "./order";
 
 interface TicketAttrs {
+  id: string;
   title: string;
   price: number;
 }
@@ -25,6 +26,7 @@ const ticketSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: true,
+      min: 0,
     },
   },
   {
@@ -38,14 +40,16 @@ const ticketSchema = new mongoose.Schema(
 );
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
-  return new Ticket(attrs);
+  return new Ticket({
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price,
+  });
 };
-
 ticketSchema.methods.isReserved = async function () {
   // this === the ticket document that we just called 'isReserved' on
   const existingOrder = await Order.findOne({
-    ticket: this,
-    // apply three status
+    ticket: this as any,
     status: {
       $in: [
         OrderStatus.Created,
@@ -54,7 +58,7 @@ ticketSchema.methods.isReserved = async function () {
       ],
     },
   });
-  // 変数が未定義でも、if文の条件式の中をboolean型にする必要がある。！！
+
   return !!existingOrder;
 };
 
