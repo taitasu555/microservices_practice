@@ -4,12 +4,14 @@ import {
   NotFoundError,
   requireAuth,
   NotAuthorizedError,
+  CustomError,
+  DatabaseConnectionError,
 } from "@taitasudev5/common";
 
 const router = express.Router();
 
 router.delete(
-  "/api/delete/:orderId",
+  "/api/orders/:orderId",
   requireAuth,
   async (req: Request, res: Response) => {
     const order = await Order.findById(req.params.orderId);
@@ -25,7 +27,7 @@ router.delete(
     order.status = OrderStatus.Cancelled;
     await order.save();
 
-    res.send(order);
+    res.status(204).send(order);
   }
 );
 
