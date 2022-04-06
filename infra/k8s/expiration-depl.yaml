@@ -1,28 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tickets-depl
+  name: expiration-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tickets
+      app: expiration
   template:
     metadata:
       labels:
-        app: tickets
+        app: expiration
     spec:
       containers:
-        - name: tickets
-          image: us.gcr.io/ticketing-dev-345606/tickets
+        - name: expiration
+          image: us.gcr.io/ticketing-dev-345606/expiration
           env:
-            - name: MONGO_URI
-              value: mongodb://tickets-mongo-srv:27017/tickets
-            - name: JWT_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: JWT_KEY
             - name: NATS_URL
               value: https://nats-srv:4222
             - name: NATS_CLUSTER_ID
@@ -31,16 +24,5 @@ spec:
               valueFrom: # NATS_CLIENT_ID is set to the pod name
                 fieldRef:
                   fieldPath: metadata.name
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: tickets-srv
-spec:
-  selector:
-    app: tickets
-  ports:
-    - name: tickets
-      protocol: TCP
-      port: 3000
-      targetPort: 3000
+            - name: REDIS_HOST
+              value: redis://expiration-redis-srv
