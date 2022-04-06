@@ -1,4 +1,3 @@
-import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
 
 const start = async () => {
