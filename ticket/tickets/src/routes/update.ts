@@ -3,6 +3,7 @@ import {
   validationRequest,
   NotAuthorizedError,
   requireAuth,
+  BadRequestError,
 } from "@taitasudev5/common/";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
@@ -31,6 +32,11 @@ router.put(
     if (ticket.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError();
     }
+
+    if (ticket.orderId) {
+      throw new BadRequestError("Cannot edit a reserved ticket");
+    }
+
     ticket.set({
       title: req.body.title,
       price: req.body.price,

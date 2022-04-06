@@ -1,6 +1,4 @@
 import express, { Request, Response } from "express";
-import { requireAuth, validationRequest } from "@taitasudev5/common";
-import { body } from "express-validator";
 import { Ticket } from "../models/ticket";
 
 const router = express.Router();
