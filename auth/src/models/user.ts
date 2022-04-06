@@ -1,4 +1,4 @@
-import { Password } from "./../services/password";
+import { Password } from "../services/password";
 import mongoose from "mongoose";
 
 // An interface that describes the properties
