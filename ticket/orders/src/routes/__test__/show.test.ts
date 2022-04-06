@@ -4,10 +4,10 @@ import { app } from "../../app";
 import { Order } from "../../models/order";
 import { Ticket } from "../../models/ticket";
 import { OrderStatus } from "@taitasudev5/common";
-
 it("fetch the order", async () => {
   // create a ticket
   const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "concert",
     price: 20,
   });
@@ -34,6 +34,7 @@ it("fetch the order", async () => {
 it("return error if wrong user access", async () => {
   // create a ticket
   const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "concert",
     price: 20,
   });

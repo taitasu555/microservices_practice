@@ -9,7 +9,6 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
 
   async onMessage(data: TicketUpdatedEvent["data"], msg: Message) {
     // data id is  the mongoose id format
-    console.log("this is my log Event data!", data);
     const ticket = await Ticket.findByEvent(data);
 
     if (!ticket) {

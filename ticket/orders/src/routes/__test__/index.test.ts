@@ -7,6 +7,7 @@ import { OrderStatus } from "@taitasudev5/common";
 
 const buildTicket = async () => {
   const ticketOne = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "concert",
     price: 20,
   });
