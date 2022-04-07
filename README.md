@@ -4,5 +4,6 @@
 - DB: mongodb
 - INFRA: GCP Kubernetes
 - OTHER: stripe
+- PUB/SUB: nute-streming-services
 
 
