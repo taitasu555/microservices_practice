@@ -2,8 +2,8 @@ import {
   Subjects,
   Publisher,
   ExpirationCompleteEvent,
-} from "@taitasudev5/common";
+} from '@cygnetops/common';
 
 export class ExpirationCompletePublisher extends Publisher<ExpirationCompleteEvent> {
-  readonly subject = Subjects.ExpirationComplete;
+  subject: Subjects.ExpirationComplete = Subjects.ExpirationComplete;
 }
