@@ -1,4 +1,5 @@
-import express, { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
+import express, { Request, Response } from "express";
 import {
   requireAuth,
   validationRequest,
@@ -7,14 +8,14 @@ import {
   BadRequestError,
 } from "@taitasudev5/common";
 import { body } from "express-validator";
-import mongoose from "mongoose";
 import { Ticket } from "../models/ticket";
 import { Order } from "../models/order";
 import { OrderCreatedPublisher } from "../events/publishers/order-created-publisher";
 import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
-const EXPIRATION_WINDOW_SECONDS = 60 * 1;
+
+const EXPIRATION_WINDOW_SECONDS = 1 * 60;
 
 router.post(
   "/api/orders",
@@ -29,26 +30,23 @@ router.post(
   validationRequest,
   async (req: Request, res: Response) => {
     const { ticketId } = req.body;
+
     // Find the ticket the user is trying to order in the database
     const ticket = await Ticket.findById(ticketId);
     if (!ticket) {
       throw new NotFoundError();
     }
-    //  Make sure the ticket not already reserved
-    // run query to look at all orders. Find an order where the ticket
-    // is the ticket we just found *and* the order status is *not* cancelled
-    // if we find an order from that means the ticket *is* reserved
 
+    // Make sure that this ticket is not already reserved
     const isReserved = await ticket.isReserved();
     if (isReserved) {
       throw new BadRequestError("Ticket is already reserved");
     }
-    // Calculate an expiration date for the order
 
+    // Calculate an expiration date for this order
     const expiration = new Date();
-
-    // 15 minutes from now
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
+
     // Build the order and save it to the database
     const order = Order.build({
       userId: req.currentUser!.id,
@@ -56,17 +54,15 @@ router.post(
       expiresAt: expiration,
       ticket,
     });
-    // publish an event saying that an order was created
     await order.save();
 
     // Publish an event saying that an order was created
-    await new OrderCreatedPublisher(natsWrapper.client).publish({
+    new OrderCreatedPublisher(natsWrapper.client).publish({
       id: order.id,
+      version: order.version,
       status: order.status,
       userId: order.userId,
-      // Utc date
       expiresAt: order.expiresAt.toISOString(),
-      version: order.version,
       ticket: {
         id: ticket.id,
         price: ticket.price,
@@ -77,4 +73,4 @@ router.post(
   }
 );
 
-export { router as newRouter };
+export { router as newOrderRouter };

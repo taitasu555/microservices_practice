@@ -1,10 +1,10 @@
-import express, { Request, Response, NextFunction } from "express";
-import { Order, OrderStatus } from "../models/order";
+import express, { Request, Response } from "express";
 import {
-  NotFoundError,
   requireAuth,
+  NotFoundError,
   NotAuthorizedError,
 } from "@taitasudev5/common";
+import { Order, OrderStatus } from "../models/order";
 import { OrderCancelledPublisher } from "../events/publishers/order-cancelled-publisher";
 import { natsWrapper } from "../nats-wrapper";
 
@@ -14,16 +14,16 @@ router.delete(
   "/api/orders/:orderId",
   requireAuth,
   async (req: Request, res: Response) => {
-    const order = await Order.findById(req.params.orderId);
+    const { orderId } = req.params;
+
+    const order = await Order.findById(orderId).populate("ticket");
 
     if (!order) {
       throw new NotFoundError();
     }
-
-    if (req.currentUser!.id !== order.userId) {
+    if (order.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError();
     }
-
     order.status = OrderStatus.Cancelled;
     await order.save();
 
@@ -35,8 +35,9 @@ router.delete(
         id: order.ticket.id,
       },
     });
+
     res.status(204).send(order);
   }
 );
 
-export { router as deleteRouter };
+export { router as deleteOrderRouter };

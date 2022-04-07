@@ -8,7 +8,6 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: TicketUpdatedEvent["data"], msg: Message) {
-    // data id is  the mongoose id format
     const ticket = await Ticket.findByEvent(data);
 
     if (!ticket) {

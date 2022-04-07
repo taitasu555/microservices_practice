@@ -1,12 +1,10 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import { requireAuth } from "@taitasudev5/common";
-
 import { Order } from "../models/order";
 
 const router = express.Router();
 
 router.get("/api/orders", requireAuth, async (req: Request, res: Response) => {
-  // get ref data using populate
   const orders = await Order.find({
     userId: req.currentUser!.id,
   }).populate("ticket");
@@ -14,4 +12,4 @@ router.get("/api/orders", requireAuth, async (req: Request, res: Response) => {
   res.send(orders);
 });
 
-export { router as indexRouter };
+export { router as indexOrderRouter };

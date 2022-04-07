@@ -1,5 +1,5 @@
-import { Publisher, OrderCancelledEvent, Subjects } from "@taitasudev5/common";
+import { Subjects, Publisher, OrderCancelledEvent } from "@taitasudev5/common";
 
 export class OrderCancelledPublisher extends Publisher<OrderCancelledEvent> {
-  readonly subject = Subjects.OrderCancelled;
+  subject: Subjects.OrderCancelled = Subjects.OrderCancelled;
 }
