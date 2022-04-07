@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
 import { OrderCreatedListeners } from "./events/listeners/order-created-listeners";
-import { OrderCancelledListeners } from "./events/listeners/order-cancelled-listeners";
+import { OrderCancelledListener } from "./events/listeners/order-cancelled-listeners";
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -38,7 +38,7 @@ const start = async () => {
     process.on("SIGTERM", () => natsWrapper.client.close());
 
     new OrderCreatedListeners(natsWrapper.client).listen();
-    new OrderCancelledListeners(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDb");
   } catch (err) {
