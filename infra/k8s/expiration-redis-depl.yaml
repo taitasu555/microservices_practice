@@ -15,7 +15,6 @@ spec:
       containers:
         - name: expiration-redis
           image: redis
-
 ---
 apiVersion: v1
 kind: Service
@@ -27,5 +26,5 @@ spec:
   ports:
     - name: db
       protocol: TCP
-      port: 6372
-      targetPort: 6372
+      port: 6379
+      targetPort: 6379
