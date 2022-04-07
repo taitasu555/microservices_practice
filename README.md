@@ -1,3 +1,8 @@
-## What I done
+## I use 
+- WEB: Next.js
+- BAcKEND: Node.js Express TypeScript
+- DB: mongodb
+- INFRA: GCP Kubernetes
+- OTHER: stripe
 
-## What I will do
+
