@@ -1,6 +1,6 @@
+import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { OrderStatus } from "@taitasudev5/common";
-import mongoose from "mongoose";
 
 interface OrderAttrs {
   id: string;
@@ -45,6 +45,7 @@ const orderSchema = new mongoose.Schema(
     },
   }
 );
+
 orderSchema.set("versionKey", "version");
 orderSchema.plugin(updateIfCurrentPlugin);
 
