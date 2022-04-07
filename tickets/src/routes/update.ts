@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import {
-  validationRequest,
+  validateRequest,
   NotFoundError,
   requireAuth,
   NotAuthorizedError,
@@ -22,7 +22,7 @@ router.put(
       .isFloat({ gt: 0 })
       .withMessage("Price must be provided and must be greater than 0"),
   ],
-  validationRequest,
+  validateRequest,
   async (req: Request, res: Response) => {
     const ticket = await Ticket.findById(req.params.id);
 

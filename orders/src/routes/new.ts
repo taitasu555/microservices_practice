@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import express, { Request, Response } from "express";
 import {
   requireAuth,
-  validationRequest,
+  validateRequest,
   NotFoundError,
   OrderStatus,
   BadRequestError,
@@ -27,7 +27,7 @@ router.post(
       .custom((input: string) => mongoose.Types.ObjectId.isValid(input))
       .withMessage("TicketId must be provided"),
   ],
-  validationRequest,
+  validateRequest,
   async (req: Request, res: Response) => {
     const { ticketId } = req.body;
 

@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
-import { requireAuth, validationRequest } from "@taitasudev5/common";
+import { requireAuth, validateRequest } from "@taitasudev5/common";
 import { Ticket } from "../models/ticket";
 import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
 import { natsWrapper } from "../nats-wrapper";
@@ -16,7 +16,7 @@ router.post(
       .isFloat({ gt: 0 })
       .withMessage("Price must be greater than 0"),
   ],
-  validationRequest,
+  validateRequest,
   async (req: Request, res: Response) => {
     const { title, price } = req.body;
 

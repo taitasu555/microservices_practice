@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
-import { validationRequest, BadRequestError } from "@taitasudev5/common";
+import { validateRequest, BadRequestError } from "@taitasudev5/common";
 import { User } from "../models/user";
 import { Password } from "../services/password";
 import jwt from "jsonwebtoken";
@@ -16,7 +16,7 @@ router.post(
       .notEmpty()
       .withMessage("You must supply a password"),
   ],
-  validationRequest,
+  validateRequest,
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const existingUser = await User.findOne({ email });
