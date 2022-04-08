@@ -6,7 +6,7 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
       <Header currentUser={currentUser ? currentUser.email : ""} />
-      <Component {...pageProps} />
+      <Component {...pageProps} currentUser={currentUser} />
     </div>
   );
 };
@@ -16,7 +16,11 @@ AppComponent.getInitialProps = async (appContext) => {
   const { data } = await client.get("/api/users/currentuser");
   let pageProps = {};
   if (appContext.Component.getInitialProps) {
-    pageProps = await appContext.Component.getInitialProps(appContext.ctx);
+    pageProps = await appContext.Component.getInitialProps(
+      appContext.ctx,
+      client,
+      data.currentUser
+    );
   }
   return {
     pageProps,
@@ -24,14 +28,6 @@ AppComponent.getInitialProps = async (appContext) => {
   };
 };
 
-// export async function getServerSideProps(context) {
-//   const client = buildClient(context);
-//   const { data } = await client.get("/api/users/currentuser");
+// above code change using getServerSideProps
 
-//   return {
-//     props: {
-//       currentUser: data.currentUser,
-//     },
-//   };
-// }
 export default AppComponent;
