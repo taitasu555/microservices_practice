@@ -16,6 +16,7 @@ const start = async () => {
   }
 
   app.listen(3000, () => {
+    conosole.log("this is my test");
     console.log("Listening on port 3000!!!!!!!!");
   });
 };
