@@ -15,8 +15,8 @@ const TicketShow = ({ ticket }) => {
       <h1>{ticket.title}</h1>
       <h4>Price: ${ticket.price} </h4>
       {errors}
-      {/* if () in do request first render, this method will be called */}
-      <button className="btn btn-primary" onClick={doRequest}>
+      {/* if () in do request first render, this method will be called  ()=> can not pass not needed event value*/}
+      <button className="btn btn-primary" onClick={() => doRequest()}>
         Buy Now
       </button>
     </div>
