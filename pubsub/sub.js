@@ -35,4 +35,4 @@ function listenForMessages() {
   }, timeout * 1000);
 }
 
-listenForMessages();
+module.exports = listenForMessages;

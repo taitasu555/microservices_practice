@@ -25,4 +25,4 @@ async function publishMessage() {
   }
 }
 
-publishMessage();
+module.exports = publishMessage;
