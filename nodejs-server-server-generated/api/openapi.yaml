@@ -1,0 +1,70 @@
+openapi: 3.0.0
+info:
+  title: auth
+  description: auth services
+  version: 1.0.0
+servers:
+- url: /v1
+paths:
+  /login:
+    get:
+      tags:
+      - users
+      summary: Get all users.
+      description: Returns an array of User model
+      operationId: loginGET
+      parameters: []
+      responses:
+        "200":
+          description: A JSON array of User model
+          content:
+            application/json:
+              schema:
+                type: array
+                example:
+                - email: test@test.com
+                items:
+                  $ref: '#/components/schemas/login'
+                x-content-type: application/json
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Users
+components:
+  schemas:
+    login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: passwor
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+  responses:
+    BadRequest:
+      description: Bad request error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not found error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
