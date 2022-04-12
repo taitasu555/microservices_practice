@@ -8,21 +8,23 @@ const data = JSON.stringify({ foo: "zer" });
 const { PubSub } = require("@google-cloud/pubsub");
 
 // Creates a client; cache this for further use
-const pubSubClient = new PubSub();
+const pubSubClient = new PubSub({
+  projectId: "ticketing-dev-345606",
+});
 
-async function publishMessage() {
+const publishMessage = async (value: string) => {
   // Publishes the message as a string, e.g. "Hello, world!" or JSON.stringify(someObject)
-  const dataBuffer = Buffer.from(data);
+  const dataBuffer = Buffer.from(value);
 
   try {
     const messageId = await pubSubClient
       .topic(topicNameOrId)
       .publish(dataBuffer);
     console.log(`Message ${messageId} published.`);
-  } catch (error) {
+  } catch (error: any) {
     console.error(`Received error while publishing: ${error.message}`);
     process.exitCode = 1;
   }
-}
+};
 
-module.exports = publishMessage;
+export { publishMessage };

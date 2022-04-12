@@ -1,6 +1,8 @@
 /**
  * TODO(developer): Uncomment these variables before running the sample.
  */
+
+import { Message } from "@google-cloud/pubsub";
 const subscriptionNameOrId = "my-sub";
 const timeout = 60;
 
@@ -8,15 +10,17 @@ const timeout = 60;
 const { PubSub } = require("@google-cloud/pubsub");
 
 // Creates a client; cache this for further use
-const pubSubClient = new PubSub();
+const pubSubClient = new PubSub({
+  projectId: "ticketing-dev-345606",
+});
 
-function listenForMessages() {
+const listenForMessages = () => {
   // References an existing subscription
   const subscription = pubSubClient.subscription(subscriptionNameOrId);
 
   // Create an event handler to handle messages
   let messageCount = 0;
-  const messageHandler = (message) => {
+  const messageHandler = (message: Message) => {
     console.log(`Received message ${message.id}:`);
     console.log(`\tData: ${message.data}`);
     console.log(`\tAttributes: ${message.attributes}`);
@@ -33,6 +37,6 @@ function listenForMessages() {
     subscription.removeListener("message", messageHandler);
     console.log(`${messageCount} message(s) received.`);
   }, timeout * 1000);
-}
+};
 
-module.exports = listenForMessages;
+export { listenForMessages };
